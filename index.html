@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>محمدی اسلامک سینٹر</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <div class="splash-inner">
+      <div class="splash-logo">
+        <div class="crescent">☽</div>
+        <div class="star">✦</div>
+      </div>
+      <h1 class="splash-title">محمدی اسلامک سینٹر</h1>
+      <p class="splash-sub">فیز ٹو، گجرانوالہ کینٹ</p>
+      <div class="splash-loader"><span></span></div>
+    </div>
+  </div>
+
+  <!-- APP WRAPPER -->
+  <div id="app" class="hidden">
+
+    <!-- HEADER -->
+    <header id="main-header">
+      <div class="header-top">
+        <div class="header-brand">
+          <span class="brand-icon">☽✦</span>
+          <div class="brand-text">
+            <h1>محمدی اسلامک سینٹر</h1>
+            <p>فیز ٹو، گجرانوالہ کینٹ</p>
+          </div>
+        </div>
+        <button id="menu-toggle" aria-label="مینو">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN PAGE (HOME) -->
+    <main id="home-page" class="page active">
+
+      <!-- INTRO SECTION -->
+      <section class="intro-section">
+        <div class="intro-card">
+          <div class="intro-badge">تعارف</div>
+          <h2>مرکزِ علم و روحانیت</h2>
+          <p>
+            محمدی اسلامک سینٹر فیز ٹو، گجرانوالہ کینٹ ۲۰۰۳ء میں قائم ہوا اور ایک طویل علمی و تعمیری سفر طے کرتے ہوئے ۲۰۲۰ء میں مکمل ہوا۔ ۲۰۲۶ء تک تمام شعبہ جات باقاعدہ فعال ہو چکے ہیں۔ یہ مرکز دینی و عصری تعلیم کو یکجا کرتے ہوئے ایسے افراد تیار کرتا ہے جو قرآن، سنت اور جدید علوم سے آراستہ ہوں۔
+          </p>
+        </div>
+      </section>
+
+      <!-- LEADERSHIP SECTION -->
+      <section class="leadership-section">
+        <div class="section-title-wrap">
+          <span class="section-eyebrow">علمی قیادت</span>
+          <h2 class="section-heading">ہماری قیادت</h2>
+        </div>
+        <div class="leader-cards">
+          <div class="leader-card founder">
+            <div class="leader-avatar">ر</div>
+            <div class="leader-info">
+              <span class="leader-role">بانی و سرپرستِ اعلیٰ</span>
+              <h3>علامہ رضا ثاقب مصطفیٰ قادری</h3>
+              <p>آپ ایک بلند پایہ عالمِ دین، عاشقِ رسول ﷺ اور داعیِ اسلام ہیں۔ آپ کی فکر کا محور ایسا معاشرہ ہے جہاں علم، اخلاق اور عشقِ رسول ﷺ کا عملی نمونہ نظر آئے۔ آپ نے مصطفیٰ انٹرنیشنل کے تحت پاکستان بھر میں اسلامک سینٹرز کا منظم نیٹ ورک قائم کیا ہے۔</p>
+            </div>
+          </div>
+          <div class="leader-card principal">
+            <div class="leader-avatar">ع</div>
+            <div class="leader-info">
+              <span class="leader-role">پرنسپل</span>
+              <h3>مولانا عثمان خالد مصطفیٰ</h3>
+              <p>مدرسے کے پرنسپل جو علمی و انتظامی امور کی نگرانی فرماتے ہیں اور طلبہ کی دینی و اخلاقی تربیت میں سرگرم ہیں۔</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEPARTMENTS GRID -->
+      <section class="departments-section">
+        <div class="section-title-wrap">
+          <span class="section-eyebrow">شعبہ جات</span>
+          <h2 class="section-heading">تعلیمی شعبے</h2>
+        </div>
+        <div class="dept-grid">
+          <button class="dept-btn" onclick="openSection('hifz')">
+            <span class="dept-icon">📖</span>
+            <span class="dept-name">شعبہ حفظ</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('dars')">
+            <span class="dept-icon">🕌</span>
+            <span class="dept-name">درس نظامی</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('asri')">
+            <span class="dept-icon">📚</span>
+            <span class="dept-name">عصری تعلیم</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('computer')">
+            <span class="dept-icon">💻</span>
+            <span class="dept-name">کمپیوٹر لیب</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('activities')">
+            <span class="dept-icon">🏆</span>
+            <span class="dept-name">سرگرمیاں</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('imtihan')">
+            <span class="dept-icon">📝</span>
+            <span class="dept-name">نظامِ امتحان</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('holidays')">
+            <span class="dept-icon">📅</span>
+            <span class="dept-name">تعطیلات</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('rules')">
+            <span class="dept-icon">⚖️</span>
+            <span class="dept-name">قوانین و ضوابط</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('islami')">
+            <span class="dept-icon">🌙</span>
+            <span class="dept-name">اسلامی شعائر</span>
+            <span class="dept-arrow">←</span>
+          </button>
+          <button class="dept-btn" onclick="openSection('parents')">
+            <span class="dept-icon">👨‍👩‍👧</span>
+            <span class="dept-name">والدین سے اہتمام</span>
+            <span class="dept-arrow">←</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- MISSION BANNER -->
+      <section class="mission-section">
+        <div class="mission-card">
+          <div class="mission-quote">❝</div>
+          <p>تعلیم بغیر تربیت کے ادھوری ہے — ہمارا مقصد ایمان، اتحاد اور تنظیم کا عملی نمونہ بننا ہے</p>
+          <span class="mission-attr">— بانی کا پیغام</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- DETAIL PAGE -->
+    <div id="detail-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="goBack()">
+          <span>←</span> واپس
+        </button>
+        <h2 id="detail-title"></h2>
+      </div>
+      <div id="detail-content" class="detail-body"></div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav id="bottom-nav">
+      <button class="nav-btn active" onclick="showPage('home')">
+        <span class="nav-icon">🏠</span>
+        <span>ہوم</span>
+      </button>
+      <button class="nav-btn" onclick="showPage('about')">
+        <span class="nav-icon">ℹ️</span>
+        <span>تعارف</span>
+      </button>
+      <button class="nav-btn" onclick="showPage('contact')">
+        <span class="nav-icon">📞</span>
+        <span>رابطہ</span>
+      </button>
+    </nav>
+
+    <!-- ABOUT PAGE -->
+    <div id="about-page" class="page">
+      <div class="page-header-simple">
+        <h2>ہمارے بارے میں</h2>
+      </div>
+      <div class="about-body">
+        <div class="about-card">
+          <h3>مشن</h3>
+          <p>محمدی اسلامک سینٹر کا مشن طلبہ کو ایسی تعلیم و تربیت فراہم کرنا ہے جو انہیں دین اور دنیا دونوں میں کامیاب بنائے۔ یہاں سے فارغ التحصیل ہونے والا طالب علم قرآن، سنت اور جدید علوم کا حامل ہو۔</p>
+        </div>
+        <div class="about-card">
+          <h3>وژن</h3>
+          <p>ایک ایسی شخصیت کی تعمیر جس کے ایک ہاتھ میں قرآنِ مجید اور دوسرے ہاتھ میں جدید سائنس کی مشعل تھامے ہوئے ہو۔</p>
+        </div>
+        <div class="about-card">
+          <h3>قیام</h3>
+          <p>یہ مرکز ۲۰۰۳ء میں قائم ہوا اور ۲۰۲۶ء تک تمام شعبہ جات مکمل طور پر فعال ہو چکے ہیں۔ مصطفیٰ انٹرنیشنل کے تحت پاکستان بھر میں اسلامک سینٹرز کا منظم نیٹ ورک قائم ہے۔</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact-page" class="page">
+      <div class="page-header-simple">
+        <h2>رابطہ</h2>
+      </div>
+      <div class="contact-body">
+        <div class="contact-card">
+          <span class="contact-icon">📍</span>
+          <div>
+            <h4>پتہ</h4>
+            <p>محمدی اسلامک سینٹر، فیز ٹو، گجرانوالہ کینٹ، پاکستان</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📞</span>
+          <div>
+            <h4>فون</h4>
+            <p>ادارے سے رابطہ کریں</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📱</span>
+          <div>
+            <h4>واٹس ایپ</h4>
+            <p>روزانہ یومیہ رپورٹ واٹس ایپ گروپ کے ذریعے</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end #app -->
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

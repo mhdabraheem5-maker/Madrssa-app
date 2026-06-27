@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ایڈمن پینل — محمدی اسلامک سینٹر</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue-deep: #0a1628; --blue-mid: #112244; --blue-accent: #1a3a6e;
+      --blue-light: #2255aa; --white: #ffffff; --off-white: #f4f7ff;
+      --gold-start: #c9a84c; --gold-mid: #e8c96a; --gold-end: #f5e09a;
+      --text-dark: #0d1b2a; --text-mid: #2c3e5a; --text-light: #556080;
+      --red: #e74c3c; --green: #27ae60;
+      --gold-grad: linear-gradient(135deg,#c9a84c,#e8c96a,#f5e09a);
+      --blue-grad: linear-gradient(160deg,#0a1628 0%,#112244 60%,#1a3a6e 100%);
+      --shadow: 0 4px 24px rgba(10,22,40,.13);
+      --radius: 16px; --transition: .26s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Noto Nastaliq Urdu','Noto Sans Arabic',serif;
+      background:var(--off-white);color:var(--text-dark);direction:rtl;
+      min-height:100vh;-webkit-font-smoothing:antialiased}
+    button{cursor:pointer;border:none;background:none;font-family:inherit}
+    input,textarea,select{font-family:inherit;direction:rtl}
+
+    /* ===== LOGIN ===== */
+    #login-screen{
+      position:fixed;inset:0;background:var(--blue-grad);
+      display:flex;align-items:center;justify-content:center;z-index:9999;
+      transition:opacity .5s ease,visibility .5s ease;
+    }
+    #login-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .login-box{
+      background:rgba(255,255,255,.07);backdrop-filter:blur(12px);
+      border:1px solid rgba(232,201,106,.2);border-radius:24px;
+      padding:2.5rem 2rem;width:min(360px,90vw);text-align:center;
+    }
+    .login-logo{font-size:2.5rem;margin-bottom:.5rem}
+    .login-title{
+      font-size:1.3rem;font-weight:700;
+      background:var(--gold-grad);-webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;background-clip:text;
+      margin-bottom:.25rem;line-height:1.5;
+    }
+    .login-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-bottom:1.8rem;
+      font-family:'Noto Sans Arabic',sans-serif}
+    .login-field{
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+      border-radius:10px;padding:.75rem 1rem;width:100%;color:#fff;
+      font-size:.9rem;margin-bottom:.9rem;outline:none;
+      transition:border-color var(--transition);
+    }
+    .login-field:focus{border-color:var(--gold-mid)}
+    .login-field::placeholder{color:rgba(255,255,255,.45);font-family:'Noto Sans Arabic',sans-serif}
+    .login-btn{
+      width:100%;padding:.85rem;border-radius:10px;
+      background:var(--gold-grad);color:var(--blue-deep);
+      font-size:.95rem;font-weight:700;letter-spacing:.02em;
+      transition:opacity var(--transition);
+    }
+    .login-btn:active{opacity:.85}
+    #login-error{
+      font-size:.8rem;color:#ff7675;margin-top:.8rem;min-height:1.2rem;
+      font-family:'Noto Sans Arabic',sans-serif;
+    }
+
+    /* ===== ADMIN LAYOUT ===== */
+    #admin-app{display:none}
+    #admin-app.show{display:block}
+
+    /* Top bar */
+    .admin-topbar{
+      background:var(--blue-grad);padding:.9rem 1.2rem;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 2px 16px rgba(10,22,40,.3);
+    }
+    .admin-brand{
+      font-size:1rem;font-weight:700;
+      background:var(--gold-grad);-webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1.4;
+    }
+    .admin-brand small{
+      display:block;font-size:.68rem;font-weight:400;
+      color:rgba(255,255,255,.55);-webkit-text-fill-color:rgba(255,255,255,.55);
+      font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .logout-btn{
+      background:rgba(231,76,60,.15);color:#ff7675;
+      border:1px solid rgba(231,76,60,.3);border-radius:8px;
+      padding:.4rem .9rem;font-size:.8rem;
+      font-family:'Noto Sans Arabic',sans-serif;
+      transition:var(--transition);
+    }
+    .logout-btn:active{background:rgba(231,76,60,.3)}
+
+    /* Tab nav */
+    .admin-tabs{
+      background:var(--white);border-bottom:2px solid rgba(26,58,110,.08);
+      display:flex;overflow-x:auto;gap:0;position:sticky;top:58px;z-index:90;
+      scrollbar-width:none;
+    }
+    .admin-tabs::-webkit-scrollbar{display:none}
+    .tab-btn{
+      padding:.75rem 1.1rem;font-size:.82rem;font-weight:600;
+      color:var(--text-light);white-space:nowrap;border-bottom:3px solid transparent;
+      transition:var(--transition);flex-shrink:0;
+    }
+    .tab-btn.active{
+      color:var(--blue-light);
+      border-bottom-color:var(--gold-mid);
+    }
+
+    /* Tab panels */
+    .tab-panel{display:none;padding:1.2rem 1rem 2rem}
+    .tab-panel.active{display:block}
+
+    /* Section header */
+    .panel-head{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:1.1rem;
+    }
+    .panel-head h2{font-size:1.1rem;font-weight:700;color:var(--blue-deep)}
+
+    /* Cards */
+    .admin-card{
+      background:var(--white);border-radius:var(--radius);
+      padding:1.2rem;margin-bottom:.9rem;
+      box-shadow:var(--shadow);
+    }
+
+    /* Form */
+    .form-group{margin-bottom:.9rem}
+    .form-label{
+      display:block;font-size:.78rem;font-weight:600;color:var(--blue-accent);
+      margin-bottom:.35rem;font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .form-input,.form-textarea,.form-select{
+      width:100%;padding:.7rem .9rem;
+      border:1.5px solid rgba(26,58,110,.15);border-radius:10px;
+      font-size:.88rem;color:var(--text-dark);background:var(--off-white);
+      outline:none;transition:border-color var(--transition);
+    }
+    .form-input:focus,.form-textarea:focus,.form-select:focus{
+      border-color:var(--blue-light);background:#fff;
+    }
+    .form-textarea{min-height:90px;resize:vertical;line-height:1.8}
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.6rem 1.2rem;border-radius:10px;font-size:.85rem;font-weight:600;
+      transition:var(--transition);font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .btn-gold{background:var(--gold-grad);color:var(--blue-deep)}
+    .btn-blue{background:var(--blue-light);color:#fff}
+    .btn-red{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.25)}
+    .btn-green{background:rgba(39,174,96,.12);color:var(--green);border:1px solid rgba(39,174,96,.25)}
+    .btn:active{opacity:.82}
+    .btn-sm{padding:.4rem .8rem;font-size:.78rem}
+
+    /* List items */
+    .item-row{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      gap:.8rem;padding:.8rem 1rem;
+      background:var(--off-white);border-radius:12px;margin-bottom:.6rem;
+    }
+    .item-info{flex:1;min-width:0}
+    .item-title{font-size:.88rem;font-weight:600;color:var(--blue-deep);margin-bottom:.2rem}
+    .item-meta{font-size:.74rem;color:var(--text-light);font-family:'Noto Sans Arabic',sans-serif}
+    .item-actions{display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap}
+
+    /* Image preview */
+    .img-preview{
+      width:100%;max-height:200px;object-fit:cover;
+      border-radius:10px;margin-top:.5rem;
+      display:none;
+    }
+    .img-preview.show{display:block}
+
+    /* Toast */
+    #toast{
+      position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+      background:var(--blue-deep);color:#fff;
+      padding:.6rem 1.4rem;border-radius:30px;
+      font-size:.82rem;font-family:'Noto Sans Arabic',sans-serif;
+      box-shadow:0 4px 20px rgba(0,0,0,.3);
+      opacity:0;transition:opacity .3s;pointer-events:none;z-index:9998;
+      white-space:nowrap;
+    }
+    #toast.show{opacity:1}
+
+    /* Loading spinner */
+    .spinner{
+      width:20px;height:20px;border:2px solid rgba(255,255,255,.3);
+      border-top-color:#fff;border-radius:50%;
+      animation:spin .8s linear infinite;display:inline-block;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Empty state */
+    .empty-state{
+      text-align:center;padding:2rem 1rem;color:var(--text-light);
+      font-size:.88rem;font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .empty-state .empty-icon{font-size:2.5rem;margin-bottom:.5rem}
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem}
+    .stat-card{
+      background:var(--blue-grad);border-radius:14px;padding:1rem;
+      text-align:center;
+    }
+    .stat-num{
+      font-size:1.6rem;font-weight:700;
+      background:var(--gold-grad);-webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;background-clip:text;
+      font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .stat-label{font-size:.72rem;color:rgba(255,255,255,.65);
+      font-family:'Noto Sans Arabic',sans-serif}
+
+    /* Badge */
+    .badge{
+      display:inline-block;padding:2px 9px;border-radius:20px;
+      font-size:.68rem;font-weight:700;font-family:'Noto Sans Arabic',sans-serif;
+    }
+    .badge-gold{background:var(--gold-grad);color:var(--blue-deep)}
+    .badge-blue{background:rgba(34,85,170,.12);color:var(--blue-light)}
+
+    /* File input */
+    .file-label{
+      display:flex;align-items:center;gap:.5rem;
+      padding:.7rem .9rem;border:1.5px dashed rgba(26,58,110,.25);
+      border-radius:10px;cursor:pointer;
+      font-size:.82rem;color:var(--text-mid);
+      font-family:'Noto Sans Arabic',sans-serif;
+      transition:border-color var(--transition);
+    }
+    .file-label:hover{border-color:var(--blue-light)}
+    .file-label input{display:none}
+
+    @media(min-width:480px){
+      .stats-grid{grid-template-columns:repeat(4,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🔐</div>
+    <div class="login-title">ایڈمن پینل</div>
+    <div class="login-sub">محمدی اسلامک سینٹر</div>
+    <input class="login-field" type="email" id="admin-email" placeholder="ای میل" autocomplete="email"/>
+    <input class="login-field" type="password" id="admin-pass" placeholder="پاسورڈ"/>
+    <button class="login-btn" onclick="doLogin()">داخل ہوں</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN APP ===== -->
+<div id="admin-app">
+
+  <!-- Top Bar -->
+  <div class="admin-topbar">
+    <div class="admin-brand">
+      محمدی اسلامک سینٹر
+      <small>ایڈمن پینل</small>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">⬅ لاگ آؤٹ</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('dashboard')">📊 ڈیش بورڈ</button>
+    <button class="tab-btn" onclick="switchTab('announcements')">📢 اعلانات</button>
+    <button class="tab-btn" onclick="switchTab('gallery')">🖼 گیلری</button>
+    <button class="tab-btn" onclick="switchTab('news')">📰 خبریں</button>
+    <button class="tab-btn" onclick="switchTab('contact')">📞 رابطہ</button>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="tab-dashboard" class="tab-panel active">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-ann">—</div>
+        <div class="stat-label">اعلانات</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-gal">—</div>
+        <div class="stat-label">تصاویر</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-news">—</div>
+        <div class="stat-label">خبریں</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">✓</div>
+        <div class="stat-label">فعال</div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3 style="font-size:.95rem;color:var(--blue-deep);margin-bottom:.8rem">⚡ فوری اعلان</h3>
+      <div class="form-group">
+        <label class="form-label">اعلان لکھیں</label>
+        <textarea class="form-textarea" id="quick-ann" placeholder="مثلاً: کل چھٹی رہے گی..."></textarea>
+      </div>
+      <button class="btn btn-gold" onclick="quickAnnounce()">📢 شائع کریں</button>
+    </div>
+
+    <div class="admin-card">
+      <h3 style="font-size:.95rem;color:var(--blue-deep);margin-bottom:.5rem">ℹ️ ایپ معلومات</h3>
+      <p style="font-size:.82rem;color:var(--text-light);line-height:2;font-family:'Noto Sans Arabic',sans-serif">
+        Firebase سے جڑی ہوئی ہے ✅<br>
+        پروجیکٹ: islamic-center-app<br>
+        تمام ڈیٹا Firestore میں محفوظ ہے
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== ANNOUNCEMENTS ===== -->
+  <div id="tab-announcements" class="tab-panel">
+    <div class="panel-head">
+      <h2>📢 اعلانات</h2>
+      <button class="btn btn-gold btn-sm" onclick="toggleForm('ann-form')">+ نیا</button>
+    </div>
+
+    <div class="admin-card" id="ann-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">عنوان</label>
+        <input class="form-input" id="ann-title" placeholder="اعلان کا عنوان"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">تفصیل</label>
+        <textarea class="form-textarea" id="ann-body" placeholder="مکمل تفصیل..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">قسم</label>
+        <select class="form-select" id="ann-type">
+          <option value="عام">عام اعلان</option>
+          <option value="چھٹی">چھٹی</option>
+          <option value="امتحان">امتحان</option>
+          <option value="تقریب">تقریب</option>
+          <option value="اہم">اہم اطلاع</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn btn-gold" onclick="saveAnnouncement()">محفوظ کریں</button>
+        <button class="btn btn-red" onclick="toggleForm('ann-form')">منسوخ</button>
+      </div>
+    </div>
+
+    <div id="ann-list">
+      <div class="empty-state"><div class="empty-icon">📢</div>لوڈ ہو رہا ہے...</div>
+    </div>
+  </div>
+
+  <!-- ===== GALLERY ===== -->
+  <div id="tab-gallery" class="tab-panel">
+    <div class="panel-head">
+      <h2>🖼 تصاویر گیلری</h2>
+      <button class="btn btn-gold btn-sm" onclick="toggleForm('gal-form')">+ اپلوڈ</button>
+    </div>
+
+    <div class="admin-card" id="gal-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">عنوان</label>
+        <input class="form-input" id="gal-title" placeholder="تصویر کا عنوان"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">تصویر منتخب کریں</label>
+        <label class="file-label">
+          <input type="file" id="gal-file" accept="image/*" onchange="previewImg(this)"/>
+          📷 تصویر چنیں
+        </label>
+        <img id="gal-preview" class="img-preview" alt="preview"/>
+      </div>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn btn-gold" onclick="uploadImage()">اپلوڈ کریں</button>
+        <button class="btn btn-red" onclick="toggleForm('gal-form')">منسوخ</button>
+      </div>
+    </div>
+
+    <div id="gal-list">
+      <div class="empty-state"><div class="empty-icon">🖼</div>لوڈ ہو رہا ہے...</div>
+    </div>
+  </div>
+
+  <!-- ===== NEWS ===== -->
+  <div id="tab-news" class="tab-panel">
+    <div class="panel-head">
+      <h2>📰 خبریں و تازہ اپڈیٹس</h2>
+      <button class="btn btn-gold btn-sm" onclick="toggleForm('news-form')">+ نئی خبر</button>
+    </div>
+
+    <div class="admin-card" id="news-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">سرخی</label>
+        <input class="form-input" id="news-title" placeholder="خبر کی سرخی"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">تفصیل</label>
+        <textarea class="form-textarea" id="news-body" placeholder="خبر کی مکمل تفصیل..."></textarea>
+      </div>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn btn-gold" onclick="saveNews()">شائع کریں</button>
+        <button class="btn btn-red" onclick="toggleForm('news-form')">منسوخ</button>
+      </div>
+    </div>
+
+    <div id="news-list">
+      <div class="empty-state"><div class="empty-icon">📰</div>لوڈ ہو رہا ہے...</div>
+    </div>
+  </div>
+
+  <!-- ===== CONTACT ===== -->
+  <div id="tab-contact" class="tab-panel">
+    <div class="admin-card">
+      <h3 style="font-size:.95rem;color:var(--blue-deep);margin-bottom:.9rem">📞 رابطہ معلومات اپڈیٹ کریں</h3>
+      <div class="form-group">
+        <label class="form-label">فون نمبر</label>
+        <input class="form-input" id="ct-phone" placeholder="+92..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">واٹس ایپ</label>
+        <input class="form-input" id="ct-whatsapp" placeholder="+92..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">ای میل</label>
+        <input class="form-input" id="ct-email" placeholder="info@..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">پتہ</label>
+        <textarea class="form-textarea" id="ct-address" placeholder="مکمل پتہ..."></textarea>
+      </div>
+      <button class="btn btn-gold" onclick="saveContact()">محفوظ کریں</button>
+    </div>
+    <div id="contact-status"></div>
+  </div>
+
+</div><!-- end #admin-app -->
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, deleteDoc,
+  doc, setDoc, getDoc, serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCJqSt1qLdDIJkwjuWL0vRnhj2bhmebwqc",
+  authDomain: "islamic-center-app.firebaseapp.com",
+  projectId: "islamic-center-app",
+  storageBucket: "islamic-center-app.firebasestorage.app",
+  messagingSenderId: "398750359604",
+  appId: "1:398750359604:web:01791d08637dd598eb2a61"
+};
+
+const fbApp   = initializeApp(firebaseConfig);
+const db      = getFirestore(fbApp);
+const auth    = getAuth(fbApp);
+const storage = getStorage(fbApp);
+
+// ===== AUTH =====
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById('login-screen').classList.add('hide');
+    document.getElementById('admin-app').classList.add('show');
+    loadAll();
+  } else {
+    document.getElementById('login-screen').classList.remove('hide');
+    document.getElementById('admin-app').classList.remove('show');
+  }
+});
+
+window.doLogin = async () => {
+  const email = document.getElementById('admin-email').value.trim();
+  const pass  = document.getElementById('admin-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = 'ای میل اور پاسورڈ درج کریں'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    errEl.textContent = 'غلط ای میل یا پاسورڈ';
+  }
+};
+
+window.doLogout = async () => {
+  await signOut(auth);
+  toast('لاگ آؤٹ ہو گئے');
+};
+
+// ===== HELPERS =====
+function toast(msg, dur=2200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+window.switchTab = (name) => {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', b.textContent.includes(
+      {dashboard:'ڈیش',announcements:'اعلانات',gallery:'گیلری',news:'خبریں',contact:'رابطہ'}[name]
+    ));
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+};
+// fix tab switching by index
+window.switchTab = (name) => {
+  const tabs = ['dashboard','announcements','gallery','news','contact'];
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i]===name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+};
+
+window.toggleForm = (id) => {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+};
+
+window.previewImg = (input) => {
+  const prev = document.getElementById('gal-preview');
+  if (input.files && input.files[0]) {
+    prev.src = URL.createObjectURL(input.files[0]);
+    prev.classList.add('show');
+  }
+};
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('ur-PK');
+}
+
+// ===== LOAD ALL =====
+async function loadAll() {
+  loadAnnouncements();
+  loadGallery();
+  loadNews();
+  loadContact();
+  loadStats();
+}
+
+async function loadStats() {
+  const [a,g,n] = await Promise.all([
+    getDocs(collection(db,'announcements')),
+    getDocs(collection(db,'gallery')),
+    getDocs(collection(db,'news'))
+  ]);
+  document.getElementById('stat-ann').textContent  = a.size;
+  document.getElementById('stat-gal').textContent  = g.size;
+  document.getElementById('stat-news').textContent = n.size;
+}
+
+// ===== ANNOUNCEMENTS =====
+async function loadAnnouncements() {
+  const list = document.getElementById('ann-list');
+  list.innerHTML = '<div class="empty-state"><div class="spinner"></div></div>';
+  const q = query(collection(db,'announcements'), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+  if (snap.empty) { list.innerHTML='<div class="empty-state"><div class="empty-icon">📢</div>کوئی اعلان نہیں</div>'; return; }
+  list.innerHTML = '';
+  snap.forEach(d => {
+    const data = d.data();
+    list.insertAdjacentHTML('beforeend', `
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-title">${data.title||'—'}</div>
+          <div class="item-meta">${formatDate(data.createdAt)} &nbsp;
+            <span class="badge badge-gold">${data.type||'عام'}</span>
+          </div>
+          <div style="font-size:.8rem;color:var(--text-mid);margin-top:.3rem;line-height:1.8">${data.body||''}</div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-red btn-sm" onclick="delAnnouncement('${d.id}')">🗑</button>
+        </div>
+      </div>`);
+  });
+}
+
+window.saveAnnouncement = async () => {
+  const title = document.getElementById('ann-title').value.trim();
+  const body  = document.getElementById('ann-body').value.trim();
+  const type  = document.getElementById('ann-type').value;
+  if (!title || !body) { toast('عنوان اور تفصیل لکھیں'); return; }
+  await addDoc(collection(db,'announcements'), { title, body, type, createdAt: serverTimestamp() });
+  toast('✅ اعلان شائع ہو گیا'); toggleForm('ann-form');
+  document.getElementById('ann-title').value = '';
+  document.getElementById('ann-body').value = '';
+  loadAnnouncements(); loadStats();
+};
+
+window.quickAnnounce = async () => {
+  const body = document.getElementById('quick-ann').value.trim();
+  if (!body) { toast('اعلان لکھیں'); return; }
+  await addDoc(collection(db,'announcements'), { title:'اعلان', body, type:'عام', createdAt: serverTimestamp() });
+  toast('✅ اعلان شائع ہو گیا');
+  document.getElementById('quick-ann').value = '';
+  loadStats();
+};
+
+window.delAnnouncement = async (id) => {
+  if (!confirm('کیا آپ یہ اعلان حذف کرنا چاہتے ہیں؟')) return;
+  await deleteDoc(doc(db,'announcements',id));
+  toast('🗑 حذف ہو گیا'); loadAnnouncements(); loadStats();
+};
+
+// ===== GALLERY =====
+async function loadGallery() {
+  const list = document.getElementById('gal-list');
+  list.innerHTML = '<div class="empty-state"><div class="spinner"></div></div>';
+  const q = query(collection(db,'gallery'), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+  if (snap.empty) { list.innerHTML='<div class="empty-state"><div class="empty-icon">🖼</div>کوئی تصویر نہیں</div>'; return; }
+  list.innerHTML = '';
+  snap.forEach(d => {
+    const data = d.data();
+    list.insertAdjacentHTML('beforeend', `
+      <div class="item-row" style="flex-direction:column;align-items:stretch">
+        <img src="${data.url}" style="width:100%;border-radius:10px;object-fit:cover;max-height:180px;margin-bottom:.6rem"/>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="item-title">${data.title||'—'}</div>
+            <div class="item-meta">${formatDate(data.createdAt)}</div>
+          </div>
+          <button class="btn btn-red btn-sm" onclick="delImage('${d.id}','${data.storagePath||''}')">🗑</button>
+        </div>
+      </div>`);
+  });
+}
+
+window.uploadImage = async () => {
+  const title = document.getElementById('gal-title').value.trim();
+  const file  = document.getElementById('gal-file').files[0];
+  if (!file) { toast('تصویر منتخب کریں'); return; }
+  toast('⏳ اپلوڈ ہو رہا ہے...');
+  const path = `gallery/${Date.now()}_${file.name}`;
+  const storRef = ref(storage, path);
+  await uploadBytes(storRef, file);
+  const url = await getDownloadURL(storRef);
+  await addDoc(collection(db,'gallery'), { title: title||file.name, url, storagePath: path, createdAt: serverTimestamp() });
+  toast('✅ تصویر اپلوڈ ہو گئی'); toggleForm('gal-form');
+  document.getElementById('gal-title').value = '';
+  document.getElementById('gal-file').value = '';
+  document.getElementById('gal-preview').classList.remove('show');
+  loadGallery(); loadStats();
+};
+
+window.delImage = async (id, path) => {
+  if (!confirm('تصویر حذف کریں؟')) return;
+  await deleteDoc(doc(db,'gallery',id));
+  if (path) { try { await deleteObject(ref(storage,path)); } catch(e){} }
+  toast('🗑 حذف ہو گئی'); loadGallery(); loadStats();
+};
+
+// ===== NEWS =====
+async function loadNews() {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="empty-state"><div class="spinner"></div></div>';
+  const q = query(collection(db,'news'), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+  if (snap.empty) { list.innerHTML='<div class="empty-state"><div class="empty-icon">📰</div>کوئی خبر نہیں</div>'; return; }
+  list.innerHTML = '';
+  snap.forEach(d => {
+    const data = d.data();
+    list.insertAdjacentHTML('beforeend', `
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-title">${data.title||'—'}</div>
+          <div class="item-meta">${formatDate(data.createdAt)}</div>
+          <div style="font-size:.8rem;color:var(--text-mid);margin-top:.3rem;line-height:1.8">${data.body||''}</div>
+        </div>
+        <button class="btn btn-red btn-sm" onclick="delNews('${d.id}')">🗑</button>
+      </div>`);
+  });
+}
+
+window.saveNews = async () => {
+  const title = document.getElementById('news-title').value.trim();
+  const body  = document.getElementById('news-body').value.trim();
+  if (!title || !body) { toast('سرخی اور تفصیل لکھیں'); return; }
+  await addDoc(collection(db,'news'), { title, body, createdAt: serverTimestamp() });
+  toast('✅ خبر شائع ہو گئی'); toggleForm('news-form');
+  document.getElementById('news-title').value='';
+  document.getElementById('news-body').value='';
+  loadNews(); loadStats();
+};
+
+window.delNews = async (id) => {
+  if (!confirm('خبر حذف کریں؟')) return;
+  await deleteDoc(doc(db,'news',id));
+  toast('🗑 حذف ہو گئی'); loadNews(); loadStats();
+};
+
+// ===== CONTACT =====
+async function loadContact() {
+  const snap = await getDoc(doc(db,'settings','contact'));
+  if (snap.exists()) {
+    const d = snap.data();
+    document.getElementById('ct-phone').value     = d.phone||'';
+    document.getElementById('ct-whatsapp').value  = d.whatsapp||'';
+    document.getElementById('ct-email').value     = d.email||'';
+    document.getElementById('ct-address').value   = d.address||'';
+  }
+}
+
+window.saveContact = async () => {
+  await setDoc(doc(db,'settings','contact'), {
+    phone:     document.getElementById('ct-phone').value.trim(),
+    whatsapp:  document.getElementById('ct-whatsapp').value.trim(),
+    email:     document.getElementById('ct-email').value.trim(),
+    address:   document.getElementById('ct-address').value.trim(),
+  });
+  toast('✅ رابطہ معلومات محفوظ ہو گئیں');
+};
+
+</script>
+</body>
+</html>
